@@ -1,5 +1,5 @@
 import { styled } from '@mui/system';
-import { Container, Typography, Button, Input } from '@mui/material'; // Import Typography, Button, and Input
+import { Container, Typography, Button, Input } from '@mui/material';
 
 export const AppContainer = styled(Container)`
   display: flex;
