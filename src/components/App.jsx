@@ -156,7 +156,7 @@ class App extends Component {
       isContactExistsModalOpen,
       isDeleteConfirmationModalOpen,
     } = this.state;
-
+    // Фільтр по імені
     const filteredContacts = contacts
       .filter(contact =>
         contact.name.toLowerCase().includes(filter.toLowerCase())
