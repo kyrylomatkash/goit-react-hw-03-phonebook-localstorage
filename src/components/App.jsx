@@ -18,20 +18,11 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 // Імпорт стилів
-import {
-  AppContainer,
-  Heading,
-  ErrorText,
-  SearchInput,
-  AddButton,
-} from './appstyles';
-
+import { AppContainer, Heading, ErrorText, SearchInput } from './appstyles';
 // Головний клас застосунку
 class App extends Component {
   state = {
     contacts: [],
-    name: '',
-    number: '',
     filter: '',
     error: '',
     editContact: null,
@@ -46,8 +37,8 @@ class App extends Component {
   };
 
   // Додавання нового контакту
-  addContact = () => {
-    const { contacts, name, number } = this.state;
+  addContact = (name, number) => {
+    const { contacts } = this.state;
 
     if (name.trim() === '' || number.trim() === '') {
       this.setState({
@@ -73,8 +64,7 @@ class App extends Component {
 
     this.setState(prevState => ({
       contacts: [...prevState.contacts, newContact],
-      name: '',
-      number: '',
+      filter: '',
       error: '',
     }));
 
@@ -128,7 +118,7 @@ class App extends Component {
   handleContactExistsModalClose = () => {
     this.setState({ isContactExistsModalOpen: false });
   };
-  // Очищення історії контактів з локального сховища
+
   clearHistory = () => {
     if (this.state.contacts.length === 0) {
       toast.warning('No contacts to clear.');
@@ -178,8 +168,6 @@ class App extends Component {
   render() {
     const {
       contacts,
-      name,
-      number,
       filter,
       error,
       editContact,
@@ -199,13 +187,7 @@ class App extends Component {
         <AppContainer>
           <Heading variant="h1">Phonebook</Heading>
           {error && <ErrorText>{error}</ErrorText>}
-          <ContactForm
-            name={name}
-            setName={newName => this.handleChange('name', newName)}
-            number={number}
-            setNumber={newNumber => this.handleChange('number', newNumber)}
-            addContact={this.addContact}
-          />
+          <ContactForm addContact={this.addContact} />
           <Typography variant="h2">Contacts</Typography>
           <SearchInput
             type="text"
@@ -220,15 +202,8 @@ class App extends Component {
             deleteContact={this.deleteContact}
             handleEditClick={this.handleEditClick}
           />
-          <AddButton
-            variant="contained"
-            onClick={this.addContact}
-            disabled={name.trim() === '' || number.trim() === ''}
-          >
-            Add Contact
-          </AddButton>
           <Button
-            variant="text"
+            variant="outlined"
             color="error"
             size="small"
             onClick={this.clearHistory}
@@ -258,7 +233,7 @@ class App extends Component {
           <DialogTitle>Contact Exists</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              A contact with the name <strong>{name}</strong> already exists.
+              A contact with the name <strong>{filter}</strong> already exists.
             </DialogContentText>
           </DialogContent>
           <DialogActions>

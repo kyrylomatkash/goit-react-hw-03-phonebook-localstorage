@@ -1,30 +1,24 @@
 // Імпорти стилів і бібліотек
 import React, { Component } from 'react';
-import { nanoid } from 'nanoid';
 import { StyledForm, StyledTextField } from './contactformstyles';
+import { Button } from '@mui/material';
 // Основний клас застосунку
 class ContactForm extends Component {
-  handleAddContact = e => {
-    e.preventDefault();
-    const { name, number, addContact } = this.props;
-
-    if (name.trim() === '' || number.trim() === '') {
-      return;
-    }
-
-    const newContact = {
-      id: nanoid(),
-      name: name.trim(),
-      number: number.trim(),
-    };
-
-    addContact(newContact);
-    this.props.setName('');
-    this.props.setNumber('');
+  state = {
+    name: '',
+    number: '',
   };
 
+  handleAddContact = e => {
+    e.preventDefault();
+
+    const { name, number } = this.state;
+    this.props.addContact(name, number);
+    this.setState({ name: '', number: '' });
+  };
+  // Рендер
   render() {
-    const { name, setName, number, setNumber } = this.props;
+    const { name, number } = this.state;
 
     return (
       <StyledForm onSubmit={this.handleAddContact}>
@@ -33,7 +27,7 @@ class ContactForm extends Component {
           variant="outlined"
           sx={{ width: '350px', marginBottom: '10px' }}
           value={name}
-          onChange={e => setName(e.target.value)}
+          onChange={e => this.setState({ name: e.target.value })}
           required
         />
         <StyledTextField
@@ -42,9 +36,12 @@ class ContactForm extends Component {
           type="tel"
           sx={{ width: '350px', marginBottom: '10px' }}
           value={number}
-          onChange={e => setNumber(e.target.value)}
+          onChange={e => this.setState({ number: e.target.value })}
           required
         />
+        <Button type="submit" variant="outlined">
+          Add Contact
+        </Button>
       </StyledForm>
     );
   }
