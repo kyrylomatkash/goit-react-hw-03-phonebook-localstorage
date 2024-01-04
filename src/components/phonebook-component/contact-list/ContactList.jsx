@@ -18,29 +18,9 @@ import {
 
 // Функція листу контактів
 class ContactList extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      editContact: null,
-      contacts: [],
-    };
-  }
-
-  // Завантаження з локального сховища
-  componentDidMount() {
-    const storedContacts = localStorage.getItem('phonebookContacts');
-    if (storedContacts) {
-      this.setState({ contacts: JSON.parse(storedContacts) });
-    }
-  }
-
-  // Збереження в локальне сховище
-  componentDidUpdate() {
-    localStorage.setItem(
-      'phonebookContacts',
-      JSON.stringify(this.state.contacts)
-    );
-  }
+  state = {
+    editContact: null,
+  };
 
   handleDeleteConfirmationClose = () => {
     this.setState({ editContact: null });
@@ -52,6 +32,7 @@ class ContactList extends Component {
     this.handleDeleteConfirmationClose();
   };
 
+  // Рендер
   render() {
     const { contacts, filter, handleEditClick } = this.props;
     const { editContact } = this.state;

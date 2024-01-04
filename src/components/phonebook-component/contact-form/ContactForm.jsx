@@ -19,12 +19,6 @@ class ContactForm extends Component {
     };
 
     addContact(newContact);
-
-    // Оновлення локального сховища
-    const updatedContacts = [...this.props.contacts, newContact];
-    localStorage.setItem('phonebookContacts', JSON.stringify(updatedContacts));
-
-    // Clear the form
     this.props.setName('');
     this.props.setNumber('');
   };

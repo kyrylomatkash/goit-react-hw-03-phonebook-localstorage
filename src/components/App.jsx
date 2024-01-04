@@ -165,11 +165,13 @@ class App extends Component {
   }
 
   // Збереження контактів в локальному сховищі
-  componentDidUpdate() {
-    localStorage.setItem(
-      'phonebookContacts',
-      JSON.stringify(this.state.contacts)
-    );
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.contacts !== prevState.contacts) {
+      localStorage.setItem(
+        'phonebookContacts',
+        JSON.stringify(this.state.contacts)
+      );
+    }
   }
 
   // Рендер
@@ -228,7 +230,7 @@ class App extends Component {
           <Button
             variant="text"
             color="error"
-            size="medium"
+            size="small"
             onClick={this.clearHistory}
           >
             Clear History
