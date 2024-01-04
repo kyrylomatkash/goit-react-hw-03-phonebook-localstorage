@@ -38,6 +38,7 @@ class App extends Component {
     isContactExistsModalOpen: false,
     isDeleteConfirmationModalOpen: false,
     contactToDelete: null,
+    isClearHistoryConfirmationModalOpen: false,
   };
 
   handleChange = (field, value) => {
@@ -127,6 +128,33 @@ class App extends Component {
   handleContactExistsModalClose = () => {
     this.setState({ isContactExistsModalOpen: false });
   };
+  // Очищення історії контактів з локального сховища
+  clearHistory = () => {
+    if (this.state.contacts.length === 0) {
+      toast.warning('No contacts to clear.');
+      return;
+    }
+
+    this.setState({
+      isClearHistoryConfirmationModalOpen: true,
+    });
+  };
+
+  handleClearHistoryConfirmation = () => {
+    this.setState({
+      contacts: [],
+      isClearHistoryConfirmationModalOpen: false,
+    });
+
+    localStorage.removeItem('phonebookContacts');
+    toast.success('Phonebook history cleared successfully');
+  };
+
+  handleCloseClearHistoryConfirmationModal = () => {
+    this.setState({
+      isClearHistoryConfirmationModalOpen: false,
+    });
+  };
 
   // Завантаження контактів з локального сховища
   componentDidMount() {
@@ -155,6 +183,7 @@ class App extends Component {
       editContact,
       isContactExistsModalOpen,
       isDeleteConfirmationModalOpen,
+      isClearHistoryConfirmationModalOpen,
     } = this.state;
     // Фільтр по імені
     const filteredContacts = contacts
@@ -196,6 +225,14 @@ class App extends Component {
           >
             Add Contact
           </AddButton>
+          <Button
+            variant="text"
+            color="error"
+            size="medium"
+            onClick={this.clearHistory}
+          >
+            Clear History
+          </Button>
         </AppContainer>
 
         {editContact && (
@@ -228,6 +265,33 @@ class App extends Component {
               color="primary"
             >
               OK
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        <Dialog
+          open={isClearHistoryConfirmationModalOpen}
+          onClose={this.handleCloseClearHistoryConfirmationModal}
+        >
+          <DialogTitle>Clear Phonebook History</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Are you sure you want to clear the phonebook history? This action
+              cannot be undone.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={this.handleCloseClearHistoryConfirmationModal}
+              color="primary"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={this.handleClearHistoryConfirmation}
+              color="primary"
+            >
+              Clear
             </Button>
           </DialogActions>
         </Dialog>
